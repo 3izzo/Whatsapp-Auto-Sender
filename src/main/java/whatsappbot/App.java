@@ -21,20 +21,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 public class App {
     private static WebDriver driver;
 
-    public static void main(String[] args) throws UnsupportedFlavorException, IOException {
-	Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
-	Clipboard systemClipboard = defaultToolkit.getSystemClipboard();
-	systemClipboard.setContents(new StringSelection("hellllllloooooooooo"), null);
-
-	DataFlavor dataFlavor = DataFlavor.stringFlavor;
-	if (systemClipboard.isDataFlavorAvailable(dataFlavor)) {
-	    Object text = systemClipboard.getData(dataFlavor);
-	    System.out.println(((String) text));
-	}
-    }
 
     public static void startBot(File f, String message, boolean useCopyPaste) throws FileNotFoundException, InterruptedException {
-
+	setUpDriver();
 	Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
 	Clipboard systemClipboard = defaultToolkit.getSystemClipboard();
 	if (useCopyPaste)
@@ -69,6 +58,21 @@ public class App {
 	driver.close();
 	driver.quit();
 	System.exit(0);
+    }
+
+    private static void setUpDriver() {
+	String os = System.getProperty("os.name").toLowerCase();
+	String pathToChromeDriver = "";
+
+	if (os.contains("win")) {
+	    pathToChromeDriver = "drivers/windowsChrome.exe";
+	} else if (os.contains("osx")) {
+	    pathToChromeDriver = "drivers/macChrome";
+	} else{
+	    pathToChromeDriver = "drivers/linuxChrome";
+	}
+	System.setProperty("webdriver.chrome.driver", pathToChromeDriver);
+
     }
 
     final static String s = Keys.chord(Keys.SHIFT, "\n");
@@ -121,7 +125,6 @@ public class App {
 
     private static boolean wasClipBoardChanged(Clipboard cb, String message) throws Exception {
 	DataFlavor dataFlavor = DataFlavor.stringFlavor;
-	System.out.println("hi");
 	if (cb.isDataFlavorAvailable(dataFlavor)) {
 	    Object text = cb.getData(dataFlavor);
 	    System.out.println(text);

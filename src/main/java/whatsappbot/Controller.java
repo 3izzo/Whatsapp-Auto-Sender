@@ -32,18 +32,22 @@ public class Controller {
 	// In response to a button click:
 	fc.showOpenDialog(null);
 //	System.out.println(fc.getSelectedFile().getAbsolutePath());
-	lblTest.setText(fc.getSelectedFile().getAbsolutePath());
-	file = fc.getSelectedFile();
+	if (fc.getSelectedFile() != null) {
+	    file = fc.getSelectedFile();
+	    lblTest.setText(file.getAbsolutePath());
+	 }
     }
 
     @FXML
     void StartBot(ActionEvent event) {
+	if(file == null) {
+	    JOptionPane.showMessageDialog(null, "Select numbers file", "", JOptionPane.WARNING_MESSAGE);
+	    return;
+	}
 	final String text = areaText.getText();
-	System.out.println(text);
-	System.out.println(checkbox.isSelected());
-
+	
 	if (text.length() >= 65536) {
-	    JOptionPane.showMessageDialog(null, "Message too long " + text.length(), "great title", JOptionPane.WARNING_MESSAGE);
+	    JOptionPane.showMessageDialog(null, "Message too long " + text.length(), "", JOptionPane.WARNING_MESSAGE);
 	    return;
 	}
 
